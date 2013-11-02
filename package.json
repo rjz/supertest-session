@@ -1,0 +1,32 @@
+{
+  "name": "supertest-session",
+  "version": "0.0.1",
+  "description": "Cookie-based session persistence for Supertest",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rjz/supertest-session"
+  },
+  "keywords": [
+    "supertest",
+    "session",
+    "cookie"
+  ],
+  "author": "RJ Zaworski <rj@rjzaworski.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rjz/supertest-session/issues"
+  },
+  "dependencies": {
+    "cookie": "~0.1.0",
+    "lodash": "~2.2.1",
+    "supertest": "~0.8.1"
+  },
+  "devDependencies": {
+    "mocha": "~1.13.0",
+    "connect": "~2.11.0"
+  }
+}
