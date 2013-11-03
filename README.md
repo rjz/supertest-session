@@ -33,20 +33,20 @@ Set up a session:
 And set some expectations:
 
     it('should fail accessing a restricted page', function (done) {
-      this.sess.request('get', '/restricted')
+      this.sess.get('/restricted')
         .expect(401)
         .end(done)
     });
 
     it('should sign in', function (done) {
-      this.sess.request('post', '/signin')
+      this.sess.post('/signin')
         .send({ username: 'foo', password: 'password' })
         .expect(200)
         .end(done);
     });
 
     it('should get a restricted page', function (done) {
-      this.sess.request('get', '/restricted')
+      this.sess.get('/restricted')
         .expect(200)
         .end(done)
     });
