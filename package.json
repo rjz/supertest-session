@@ -23,7 +23,7 @@
   "dependencies": {
     "cookie": "~0.1.0",
     "lodash": "~2.2.1",
-    "supertest": "~0.8.1"
+    "supertest": "~0.13.0"
   },
   "devDependencies": {
     "mocha": "~1.13.0",
