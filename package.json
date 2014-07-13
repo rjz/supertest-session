@@ -4,7 +4,8 @@
   "description": "Cookie-based session persistence for Supertest",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "./node_modules/mocha/bin/mocha",
+    "cover": "istanbul cover ./node_modules/mocha/bin/_mocha"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,8 @@
     "supertest": "~0.13.0"
   },
   "devDependencies": {
-    "mocha": "~1.13.0",
-    "connect": "~2.11.0"
+    "connect": "~2.11.0",
+    "istanbul": "^0.3.0",
+    "mocha": "~1.13.0"
   }
 }
