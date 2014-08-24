@@ -73,6 +73,19 @@ The cookies attached to the session may be retrieved from `session.cookies` at a
       });
     });
 
+### Request hooks
+
+By default, supertest-session authenticates using session cookies. If your app
+uses a custom strategy to restore sessions, you can provide `before` and `after`
+hooks to adjust the request and inspect the response:
+
+    var Session = require('supertest-session')({
+      app: require('../../path/to/app'),
+      before: function (req) {
+        req.set('authorization', 'Basic aGVsbG86d29ybGQK');
+      }
+    });
+
 ## License
 
 MIT

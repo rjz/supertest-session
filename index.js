@@ -1,14 +1,16 @@
 var _ = require('lodash'),
-    request = require('supertest'),
-    cookie = require('cookie');
+    cookie = require('cookie'),
+    request = require('supertest');
+
+function serializeCookie (c) {
+  return _.compact(_.map(c, function (v, k) {
+    if (k != 'Path') return cookie.serialize(k, v);
+  }));
+}
 
 module.exports = function (config) {
 
-  var serializeCookie = function (c) {
-    return _.compact(_.map(c, function (v, k) {
-      if (k != 'Path') return cookie.serialize(k, v);
-    }));
-  };
+  if (!config) config = {};
 
   function Session () {
     this.app = config.app;
@@ -20,27 +22,44 @@ module.exports = function (config) {
     }
   }
 
-  Session.prototype.request = function (meth, route) {
-    var req, self = this;
-    req = request(this.app);
-    req = req[meth](route);
+  Session.prototype._before = function (req) {
     req.cookies = _.map(this.cookies, serializeCookie).join('; ');
+    if (config.before) config.before.call(this, req);
+  };
 
-    // Extract cookies once request is complete
+  // Extract cookies once request is complete
+  Session.prototype._after = function (req, res) {
+    if (config.after) config.after.call(this, req, res);
+    if (_.has(res.headers, 'set-cookie')) {
+      this.cookies = _.map(res.headers['set-cookie'], cookie.parse);
+    }
+  };
+
+  Session.prototype._destroy = function () {
+    if (config.destroy) config.destroy.call(this);
+    this.cookies = null;
+  };
+
+  Session.prototype.request = function (meth, route) {
+    var req = request(this.app);
+    req = req[meth](route);
+
+    this._before(req);
+
     req.end = _.wrap(_.bind(req.end, req), function (end, callback) {
       return end(_.wrap(callback, function (callback, err, res) {
-        if (err === null && _.has(res.headers, 'set-cookie')) {
-          self.cookies = _.map(res.headers['set-cookie'], cookie.parse);
+        if (err === null) {
+          this._after(req, res);
         }
         return callback(err, res);
-      }));
-    });
+      }.bind(this)));
+    }.bind(this));
 
     return req;
   };
 
   Session.prototype.destroy = function () {
-    this.cookies = null;
+    this._destroy();
   };
 
   _.each(['get','put','post','del'], function (m) {
