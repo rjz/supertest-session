@@ -1,21 +1,23 @@
 var _ = require('lodash'),
     app = require('./app'),
-    Session = require('../index')({ app: app });
+    session = require('../index');
 
 describe('supertest session', function () {
+
+  var Session = session({ app: app })
+
   before(function (done) {
     this.sess = new Session();
-
     this.sess.request('get', '/')
       .expect(200)
-      .expect('GET,1')
+      .expect('GET,,1')
       .end(done);
   });
 
   it('should increment session counter', function (done) {
     this.sess.request('get', '/')
       .expect(200)
-      .expect('GET,2')
+      .expect('GET,,2')
       .end(done);
   });
 
@@ -23,7 +25,7 @@ describe('supertest session', function () {
     this.sess.destroy();
     this.sess.get('/')
       .expect(200)
-      .expect('GET,1')
+      .expect('GET,,1')
       .end(done);
   });
 
@@ -40,10 +42,35 @@ describe('supertest session', function () {
       it('should support ' + m, function (done) {
         this.sess[m]('/')
           .expect(200)
-          .expect([v, ++count].join(','))
+          .expect([v, '', ++count].join(','))
           .end(done);
       });
     });
+  });
+});
+
+describe('Session with a .before hook', function () {
+
+  var Session = session({
+    app: app,
+    before: function (req) {
+      req.set('authorization', 'bearer TEST_SESSION_TOKEN');
+    }
+  });
+
+  before(function (done) {
+    this.sess = new Session();
+    this.sess.request('get', '/token')
+      .expect(200)
+      .expect('GET,token,1')
+      .end(done);
+  });
+
+  it('should increment session counter', function (done) {
+    this.sess.request('get', '/token')
+      .expect(200)
+      .expect('GET,token,2')
+      .end(done);
   });
 });
 
