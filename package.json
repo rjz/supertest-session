@@ -1,6 +1,6 @@
 {
   "name": "supertest-session",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Cookie-based session persistence for Supertest",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,9 @@
     "cookie"
   ],
   "author": "RJ Zaworski <rj@rjzaworski.com>",
+  "contributors": [
+    { "name": "Chris Young", "email": "young.c.5690@gmail.com" }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/rjz/supertest-session/issues"

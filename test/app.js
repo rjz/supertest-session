@@ -6,6 +6,10 @@ app.use(connect.cookieParser());
 app.use(connect.cookieSession({ secret: 'not-very' }));
 
 app.use(function (req, res) {
+  if (req.url === '/env') {
+    res.statusCode = 200;
+    res.end(JSON.stringify(process.env));
+  }
 
   if (!req.session.count) {
     req.session.count = 1;

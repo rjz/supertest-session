@@ -20,6 +20,13 @@ Require `supertest-session` and pass in the test application:
       app: require('../../path/to/app')
     });
 
+You can set environmental variables by including an `envs` object:
+
+    var Session = require('supertest-session')({
+      app: require('../../path/to/app'),
+      envs: { NODE_ENV: 'development' }
+    });
+
 Set up a session:
 
     before(function () {
