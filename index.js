@@ -12,6 +12,12 @@ module.exports = function (config) {
 
   function Session () {
     this.app = config.app;
+
+    if (config.envs && _.isObject(config.envs)) {
+      _.each(Object.keys(config.envs), function(e) {
+        process.env[e] = config.envs[e];
+      });
+    }
   }
 
   Session.prototype.request = function (meth, route) {
