@@ -1,6 +1,6 @@
 {
   "name": "supertest-session",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Cookie-based session persistence for Supertest",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,10 @@
   ],
   "author": "RJ Zaworski <rj@rjzaworski.com>",
   "contributors": [
-    { "name": "Chris Young", "email": "cyoung@mobiquityinc.com" }
+    {
+      "name": "Chris Young",
+      "email": "cyoung@mobiquityinc.com"
+    }
   ],
   "license": "MIT",
   "bugs": {
