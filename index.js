@@ -4,7 +4,9 @@ var _ = require('lodash'),
 
 function serializeCookie (c) {
   return _.compact(_.map(c, function (v, k) {
-    if (k != 'Path') return cookie.serialize(k, v);
+    if (k.toLowerCase() !== 'path') {
+      return decodeURIComponent(cookie.serialize(k, v));
+    }
   }));
 }
 
