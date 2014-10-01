@@ -1,34 +1,31 @@
-var connect = require('connect');
+var connect = require('connect'),
+    cookieSession = require('cookie-session');
 
 var app = module.exports = connect();
 
-app.use(connect.cookieParser());
-app.use(connect.cookieSession({ secret: 'not-very' }));
-
-function counter (req, res, next) {
-  var count = req.session.count || 0;
-  req.session.count = count + 1;
-  next();
-}
+app.use(cookieSession({
+  name: 'supertest-session',
+  secret: 'not-very'
+}));
 
 var _sessions = {};
 
-function tokenSession (req, res, next) {
+function counter (req, res) {
   var token;
+  var _session = {};
+
+  var _count = req.session.count || 0;
 
   if (req.headers.authorization) {
     token = req.headers.authorization.split(' ').pop();
-    req.session = _sessions[token] || { count: 0, type: 'token' };
-    _sessions[token] = req.session;
+    _session = _sessions[token] || { count: _count, type: 'token' };
+    _sessions[token] = _session;
   }
 
-  next();
-}
+  _session.count = _count + 1;
 
-app.use(tokenSession);
-app.use(counter);
+  req.session = _session;
 
-app.use(function (req, res) {
   res.statusCode = 200;
 
   if (req.url === '/env') {
@@ -37,5 +34,7 @@ app.use(function (req, res) {
   else {
     res.end([req.method, req.session.type, req.session.count].join(','));
   }
-});
+}
+
+app.use(counter);
 
