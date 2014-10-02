@@ -46,10 +46,11 @@ describe('supertest session', function () {
   describe('method sugar', function () {
     var count = 1,
         methods = {
-          'del': 'DELETE',
-          'get': 'GET',
-          'post': 'POST',
-          'put': 'PUT'
+          'del'   : 'DELETE',
+          'get'   : 'GET',
+          'post'  : 'POST',
+          'put'   : 'PUT',
+          'patch' : 'PATCH'
         };
 
     _.each(methods, function (v, m) {
