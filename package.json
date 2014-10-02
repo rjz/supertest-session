@@ -1,6 +1,6 @@
 {
   "name": "supertest-session",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Cookie-based session persistence for Supertest",
   "main": "index.js",
   "scripts": {
