@@ -64,7 +64,7 @@ module.exports = function (config) {
     this._destroy();
   };
 
-  _.each(['get','put','post','del'], function (m) {
+  _.each(['get','put','post','del', 'patch'], function (m) {
     Session.prototype[m] = _.partial(Session.prototype.request, m);
   });
 
