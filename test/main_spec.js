@@ -1,4 +1,5 @@
 var _ = require('lodash'),
+    tr = require('through'),
     assert = require('assert'),
     app = require('./app'),
     session = require('../index');
@@ -41,6 +42,14 @@ describe('supertest session', function () {
       .expect(200)
       .expect('GET,,1')
       .end(done);
+  });
+
+  it('supports streaming', function (done) {
+    var sess = new Session();
+    sess.get('/')
+      .pipe(tr(function (data) {
+        assert.equal(data.toString('utf8'), 'GET,,1');
+      }, done));
   });
 
   describe('method sugar', function () {

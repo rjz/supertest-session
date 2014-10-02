@@ -37,6 +37,7 @@
     "cookie-session": "^1.0.2",
     "express": "^4.9.5",
     "istanbul": "^0.3.0",
-    "mocha": "~1.13.0"
+    "mocha": "~1.13.0",
+    "through": "^2.3.6"
   }
 }
