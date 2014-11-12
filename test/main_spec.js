@@ -6,28 +6,30 @@ var _ = require('lodash'),
 
 describe('supertest session', function () {
 
+  var sess = null;
+
   var Session = session({
     app: app,
     envs: { NODE_ENV: 'development'}
   });
 
   beforeEach(function (done) {
-    this.sess = new Session();
-    this.sess.request('get', '/')
+    sess = new Session();
+    sess.request('get', '/')
       .expect(200)
       .expect('GET,,1')
       .end(done);
   });
 
   it('should increment session counter', function (done) {
-    this.sess.request('get', '/')
+    sess.request('get', '/')
       .expect(200)
       .expect('GET,,2')
       .end(done);
   });
 
   it('should set enviromental variables', function(done) {
-    this.sess.request('get', '/env')
+    sess.request('get', '/env')
       .expect(200)
       .end(function(err, res) {
         assert.equal(err, undefined);
@@ -37,15 +39,15 @@ describe('supertest session', function () {
   });
 
   it('should destroy session', function (done) {
-    this.sess.destroy();
-    this.sess.get('/')
+    sess.destroy();
+    sess.get('/')
       .expect(200)
       .expect('GET,,1')
       .end(done);
   });
 
   it('supports streaming', function (done) {
-    var sess = new Session();
+    sess = new Session();
     sess.get('/')
       .pipe(tr(function (data) {
         assert.equal(data.toString('utf8'), 'GET,,1');
@@ -63,7 +65,7 @@ describe('supertest session', function () {
 
     _.each(methods, function (v, m) {
       it('should support ' + m, function (done) {
-        this.sess[m]('/')
+        sess[m]('/')
           .expect(200)
           .expect(v + ',,2')
           .end(done);
@@ -74,6 +76,8 @@ describe('supertest session', function () {
 
 describe('Session with a .before hook', function () {
 
+  var sess = null;
+
   var Session = session({
     app: app,
     before: function (req) {
@@ -82,15 +86,15 @@ describe('Session with a .before hook', function () {
   });
 
   beforeEach(function (done) {
-    this.sess = new Session();
-    this.sess.request('get', '/token')
+    sess = new Session();
+    sess.request('get', '/token')
       .expect(200)
       .expect('GET,token,1')
       .end(done);
   });
 
   it('should increment session counter', function (done) {
-    this.sess.request('get', '/token')
+    sess.request('get', '/token')
       .expect(200)
       .expect('GET,token,2')
       .end(done);
