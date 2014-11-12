@@ -11,7 +11,7 @@ describe('supertest session', function () {
     envs: { NODE_ENV: 'development'}
   });
 
-  before(function (done) {
+  beforeEach(function (done) {
     this.sess = new Session();
     this.sess.request('get', '/')
       .expect(200)
@@ -53,8 +53,7 @@ describe('supertest session', function () {
   });
 
   describe('method sugar', function () {
-    var count = 1,
-        methods = {
+    var methods = {
           'del'   : 'DELETE',
           'get'   : 'GET',
           'post'  : 'POST',
@@ -66,7 +65,7 @@ describe('supertest session', function () {
       it('should support ' + m, function (done) {
         this.sess[m]('/')
           .expect(200)
-          .expect([v, '', ++count].join(','))
+          .expect(v + ',,2')
           .end(done);
       });
     });
@@ -82,7 +81,7 @@ describe('Session with a .before hook', function () {
     }
   });
 
-  before(function (done) {
+  beforeEach(function (done) {
     this.sess = new Session();
     this.sess.request('get', '/token')
       .expect(200)
