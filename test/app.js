@@ -5,7 +5,8 @@ var app = module.exports = connect();
 
 app.use(cookieSession({
   name: 'supertest-session',
-  secret: 'not-very'
+  secret: 'not-very',
+  maxAge: 3600
 }));
 
 var _sessions = {};
