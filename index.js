@@ -2,9 +2,19 @@ var _ = require('lodash'),
     cookie = require('cookie'),
     request = require('supertest');
 
+// A/V pairs defined for Set-Cookie in RFC-6265
+var reservedAvs = [
+  'path',
+  'expires',
+  'max-age',
+  'domain',
+  'secure',
+  'httponly'
+];
+
 function serializeCookie (c) {
   return _.compact(_.map(c, function (v, k) {
-    if (k.toLowerCase() !== 'path') {
+    if (reservedAvs.indexOf(k.toLowerCase()) === -1) {
       return decodeURIComponent(cookie.serialize(k, v));
     }
   }));
