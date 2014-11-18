@@ -1,5 +1,4 @@
-var _ = require('lodash'),
-    tr = require('through'),
+var tr = require('through'),
     assert = require('assert'),
     app = require('./app'),
     session = require('../index');
@@ -63,11 +62,11 @@ describe('supertest session', function () {
           'patch' : 'PATCH'
         };
 
-    _.each(methods, function (v, m) {
-      it('should support ' + m, function (done) {
-        sess[m]('/')
+    Object.keys(methods).forEach(function (key) {
+      it('should support ' + key, function (done) {
+        sess[key]('/')
           .expect(200)
-          .expect(v + ',,2')
+          .expect(methods[key] + ',,2')
           .end(done);
       });
     });

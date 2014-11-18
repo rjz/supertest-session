@@ -13,9 +13,9 @@ var reservedAvs = [
 ];
 
 function serializeCookie (c) {
-  return _.compact(_.map(c, function (v, k) {
+  return _.compact(Object.keys(c).map(function (k) {
     if (reservedAvs.indexOf(k.toLowerCase()) === -1) {
-      return decodeURIComponent(cookie.serialize(k, v));
+      return decodeURIComponent(cookie.serialize(k, c[k]));
     }
   }));
 }
@@ -28,22 +28,24 @@ module.exports = function (config) {
     this.app = config.app;
 
     if (config.envs && _.isObject(config.envs)) {
-      _.each(Object.keys(config.envs), function(e) {
+      Object.keys(config.envs).forEach(function(e) {
         process.env[e] = config.envs[e];
       });
     }
   }
 
   Session.prototype._before = function (req) {
-    req.cookies = _.map(this.cookies, serializeCookie).join('; ');
+    if (this.cookies) {
+      req.cookies = this.cookies.map(serializeCookie).join('; ');
+    }
     if (config.before) config.before.call(this, req);
   };
 
   // Extract cookies once request is complete
   Session.prototype._after = function (req, res) {
     if (config.after) config.after.call(this, req, res);
-    if (_.has(res.headers, 'set-cookie')) {
-      this.cookies = _.map(res.headers['set-cookie'], cookie.parse);
+    if (res.headers.hasOwnProperty('set-cookie')) {
+      this.cookies = res.headers['set-cookie'].map(cookie.parse);
     }
   };
 
@@ -58,7 +60,7 @@ module.exports = function (config) {
 
     this._before(req);
 
-    req.end = _.wrap(_.bind(req.end, req), function (end, callback) {
+    req.end = _.wrap(req.end.bind(req), function (end, callback) {
       return end(_.wrap(callback, function (callback, err, res) {
         if (err === null) {
           this._after(req, res);
@@ -74,7 +76,7 @@ module.exports = function (config) {
     this._destroy();
   };
 
-  _.each(['get','put','post','del', 'patch'], function (m) {
+  ['get', 'put', 'post', 'del', 'patch'].forEach(function (m) {
     Session.prototype[m] = _.partial(Session.prototype.request, m);
   });
 
