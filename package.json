@@ -32,7 +32,7 @@
     "coveralls": "^2.11.2",
     "jasmine-node": "^1.14.5",
     "lodash": "~2.2.1",
-    "supertest": "^0.14.0"
+    "supertest": "^0.15.0"
   },
   "devDependencies": {
     "connect": "^3.2.0",
