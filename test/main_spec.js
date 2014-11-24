@@ -45,14 +45,6 @@ describe('supertest session', function () {
       .end(done);
   });
 
-  it('supports streaming', function (done) {
-    sess = new Session();
-    sess.get('/')
-      .pipe(tr(function (data) {
-        assert.equal(data.toString('utf8'), 'GET,,1');
-      }, done));
-  });
-
   describe('method sugar', function () {
     var methods = {
           'del'   : 'DELETE',
