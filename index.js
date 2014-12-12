@@ -56,19 +56,21 @@ module.exports = function (config) {
   };
 
   Session.prototype.request = function (meth, route) {
-    var req = request(this.app);
-    req = req[meth](route);
+    var req = request(this.app)[meth](route);
+    var sess = this;
+
+    var _end = req.end.bind(req);
 
     this._before(req);
 
-    req.end = _.wrap(req.end.bind(req), function (end, callback) {
-      return end(_.wrap(callback, function (callback, err, res) {
+    req.end = function (callback) {
+      return _end(function (err, res) {
         if (err === null) {
-          this._after(req, res);
+          sess._after(req, res);
         }
         return callback(err, res);
-      }.bind(this)));
-    }.bind(this));
+      });
+    };
 
     return req;
   };
