@@ -51,7 +51,7 @@ module.exports = function (config) {
     }
   };
 
-  Session.prototype._destroy = function () {
+  Session.prototype.destroy = function () {
     if (config.destroy) config.destroy.call(this);
     this.cookies = null;
   };
@@ -74,10 +74,6 @@ module.exports = function (config) {
     };
 
     return req;
-  };
-
-  Session.prototype.destroy = function () {
-    this._destroy();
   };
 
   methods.forEach(function (m) {
