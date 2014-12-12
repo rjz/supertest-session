@@ -1,5 +1,4 @@
-var _ = require('lodash'),
-    cookie = require('cookie'),
+var cookie = require('cookie'),
     methods = require('methods'),
     request = require('supertest');
 
@@ -14,11 +13,13 @@ var reservedAvs = [
 ];
 
 function serializeCookie (c) {
-  return _.compact(Object.keys(c).map(function (k) {
-    if (reservedAvs.indexOf(k.toLowerCase()) === -1) {
-      return decodeURIComponent(cookie.serialize(k, c[k]));
+  return Object.keys(c).reduce(function (pairs, key) {
+    var isReserved = reservedAvs.indexOf(key.toLowerCase()) === -1;
+    if (isReserved) {
+      return pairs.concat(decodeURIComponent(cookie.serialize(key, c[key])));
     }
-  }));
+    return pairs;
+  }, []);
 }
 
 module.exports = function (config) {
@@ -28,7 +29,7 @@ module.exports = function (config) {
   function Session () {
     this.app = config.app;
 
-    if (config.envs && _.isObject(config.envs)) {
+    if (config.envs && (config.envs instanceof Object)) {
       Object.keys(config.envs).forEach(function(e) {
         process.env[e] = config.envs[e];
       });
@@ -80,14 +81,19 @@ module.exports = function (config) {
   };
 
   methods.forEach(function (m) {
-    Session.prototype[m] = _.partial(Session.prototype.request, m);
+    Session.prototype[m] = function () {
+      var args = [].slice.call(arguments);
+      return this.request.apply(this, [m].concat(args));
+    };
   });
 
   // Back-compatibility only; will be removed in future version bump.
   Session.prototype.del = Session.prototype.delete;
 
-  if (_.isObject(config.helpers)) {
-    _.extend(Session.prototype, config.helpers);
+  if (config.helpers instanceof Object) {
+    Object.keys(config.helpers).forEach(function (key) {
+      Session.prototype[key] = config.helpers[key];
+    });
   }
 
   return Session;
