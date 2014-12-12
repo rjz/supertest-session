@@ -59,16 +59,13 @@ module.exports = function (config) {
   Session.prototype.request = function (meth, route) {
     var req = request(this.app)[meth](route);
     var sess = this;
-
     var _end = req.end.bind(req);
 
     this._before(req);
 
     req.end = function (callback) {
       return _end(function (err, res) {
-        if (err === null) {
-          sess._after(req, res);
-        }
+        if (err === null) sess._after(req, res);
         return callback(err, res);
       });
     };
