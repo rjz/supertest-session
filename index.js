@@ -1,5 +1,6 @@
 var _ = require('lodash'),
     cookie = require('cookie'),
+    methods = require('methods'),
     request = require('supertest');
 
 // A/V pairs defined for Set-Cookie in RFC-6265
@@ -76,9 +77,12 @@ module.exports = function (config) {
     this._destroy();
   };
 
-  ['get', 'put', 'post', 'del', 'patch'].forEach(function (m) {
+  methods.forEach(function (m) {
     Session.prototype[m] = _.partial(Session.prototype.request, m);
   });
+
+  // Back-compatibility only; will be removed in future version bump.
+  Session.prototype.del = Session.prototype.delete;
 
   if (_.isObject(config.helpers)) {
     _.extend(Session.prototype, config.helpers);
