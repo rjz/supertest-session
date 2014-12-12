@@ -47,12 +47,12 @@ describe('supertest session', function () {
 
   describe('method sugar', function () {
     var methods = {
-          'del'   : 'DELETE',
-          'get'   : 'GET',
-          'post'  : 'POST',
-          'put'   : 'PUT',
-          'patch' : 'PATCH'
-        };
+      'del'   : 'DELETE',
+      'get'   : 'GET',
+      'post'  : 'POST',
+      'put'   : 'PUT',
+      'patch' : 'PATCH'
+    };
 
     Object.keys(methods).forEach(function (key) {
       it('should support ' + key, function (done) {
