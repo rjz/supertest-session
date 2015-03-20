@@ -34,12 +34,14 @@ You can set environmental variables by including an `envs` object:
 
 Set up a session:
 
-    before(function () {
+    before(function (done) {
       this.sess = new Session();
+      done();
     });
 
-    after(function () {
+    after(function (done) {
       this.sess.destroy();
+      done();
     });
 
 And set some expectations:
