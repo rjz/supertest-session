@@ -4,9 +4,10 @@
   "description": "Cookie-based session persistence for Supertest",
   "main": "index.js",
   "scripts": {
-    "lint": "./node_modules/jshint/bin/jshint .",
-    "test": "npm run lint && ./node_modules/jasmine-node/bin/jasmine-node test",
-    "cover": "./node_modules/istanbul/lib/cli.js cover ./node_modules/jasmine-node/bin/jasmine-node ./spec/ && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "lint": "jshint",
+    "pretest": "npm run lint",
+    "test": "jasmine-node test",
+    "cover": "istanbul cover jasmine-node test"
   },
   "repository": {
     "type": "git",
