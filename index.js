@@ -1,6 +1,7 @@
 var cookie = require('cookie'),
     methods = require('methods'),
-    request = require('supertest');
+    request = require('supertest'),
+    util = require('util');
 
 // A/V pairs defined for Set-Cookie in RFC-6265
 var reservedAvs = [
@@ -80,8 +81,8 @@ module.exports = function (config) {
     };
   });
 
-  // Back-compatibility only; will be removed in future version bump.
-  Session.prototype.del = Session.prototype.delete;
+  Session.prototype.del = util.deprecate(Session.prototype.delete,
+    'Session.del is deprecated; please use Session.delete');
 
   if (config.helpers instanceof Object) {
     Object.keys(config.helpers).forEach(function (key) {
