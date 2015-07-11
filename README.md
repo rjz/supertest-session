@@ -1,6 +1,6 @@
 # Supertest sessions
 
-Session wrapper around supertest.
+Session wrapper around supertest; forked to use [supertest-as-promised](https://github.com/WhoopInc/supertest-as-promised).
 
 [![Build
 Status](https://travis-ci.org/rjz/supertest-session.svg?branch=master)](https://travis-ci.org/rjz/supertest-session)
