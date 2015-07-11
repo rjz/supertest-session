@@ -1,6 +1,6 @@
 var cookie = require('cookie'),
     methods = require('methods'),
-    request = require('supertest');
+    request = require('supertest-as-promised');
 
 // A/V pairs defined for Set-Cookie in RFC-6265
 var reservedAvs = [

@@ -4,7 +4,7 @@ var connect = require('connect'),
 var app = module.exports = connect();
 
 app.use(cookieSession({
-  name: 'supertest-session',
+  name: 'supertest-session-as-promised',
   secret: 'not-very',
   maxAge: 3600
 }));
