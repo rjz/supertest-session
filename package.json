@@ -1,6 +1,6 @@
 {
   "name": "supertest-session-as-promised",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Cookie-based session persistence for Supertest-as-promised",
   "main": "index.js",
   "scripts": {
