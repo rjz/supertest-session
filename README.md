@@ -19,15 +19,15 @@ References:
 
 ## Usage
 
-Require `supertest-session` and pass in the test application:
+Require `supertest-session-as-promised` and pass in the test application:
 
-    var Session = require('supertest-session')({
+    var Session = require('supertest-session-as-promised')({
       app: require('../../path/to/app')
     });
 
 You can set environmental variables by including an `envs` object:
 
-    var Session = require('supertest-session')({
+    var Session = require('supertest-session-as-promised')({
       app: require('../../path/to/app'),
       envs: { NODE_ENV: 'development' }
     });
