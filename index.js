@@ -112,7 +112,7 @@ var deprecatedLegacySession = util.deprecate(legacySession,
   'supertest-session: module configuration will be removed in next version.');
 
 module.exports = function (app, options) {
-  if (!(app.listen instanceof Function)) {
+  if (typeof app != 'function') {
     return deprecatedLegacySession(app);
   }
 
