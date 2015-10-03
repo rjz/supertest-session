@@ -1,5 +1,4 @@
-var tr = require('through'),
-    assert = require('assert'),
+var assert = require('assert'),
     app = require('./app'),
     session = require('../index');
 
