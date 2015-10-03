@@ -23,6 +23,15 @@ function serializeCookie (c) {
   }, []);
 }
 
+function assignEnvs (envs) {
+  Object.keys(envs).forEach(function(e) {
+    process.env[e] = envs[e];
+  });
+}
+
+var deprecatedAssignEnvs = util.deprecate(assignEnvs,
+  'supertest-session env configuration is deprecated and will be removed in next version.');
+
 module.exports = function (config) {
 
   if (!config) config = {};
@@ -31,9 +40,7 @@ module.exports = function (config) {
     this.app = config.app;
 
     if (config.envs && (config.envs instanceof Object)) {
-      Object.keys(config.envs).forEach(function(e) {
-        process.env[e] = config.envs[e];
-      });
+      deprecatedAssignEnvs(config.envs);
     }
   }
 
