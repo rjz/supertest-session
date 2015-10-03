@@ -4,7 +4,7 @@
   "description": "Cookie-based session persistence for Supertest",
   "main": "index.js",
   "scripts": {
-    "lint": "jshint",
+    "lint": "jshint .",
     "pretest": "npm run lint",
     "test": "jasmine-node test",
     "cover": "istanbul cover jasmine-node test"
