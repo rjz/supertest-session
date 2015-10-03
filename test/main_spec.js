@@ -7,8 +7,7 @@ describe('supertest session', function () {
   var sess = null;
 
   var Session = session({
-    app: app,
-    envs: { NODE_ENV: 'development'}
+    app: app
   });
 
   beforeEach(function (done) {
@@ -24,16 +23,6 @@ describe('supertest session', function () {
       .expect(200)
       .expect('GET,,2')
       .end(done);
-  });
-
-  it('should set enviromental variables', function(done) {
-    sess.request('get', '/env')
-      .expect(200)
-      .end(function(err, res) {
-        assert.equal(err, undefined);
-        assert.equal(JSON.parse(res.text).NODE_ENV, 'development');
-        done();
-      });
   });
 
   it('should destroy session', function (done) {

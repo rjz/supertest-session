@@ -29,12 +29,7 @@ function counter (req, res) {
 
   res.statusCode = 200;
 
-  if (req.url === '/env') {
-    res.end(JSON.stringify(process.env));
-  }
-  else {
-    res.end([req.method, req.session.type, req.session.count].join(','));
-  }
+  res.end([req.method, req.session.type, req.session.count].join(','));
 }
 
 app.use(counter);
