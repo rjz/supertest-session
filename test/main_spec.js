@@ -2,16 +2,12 @@ var assert = require('assert'),
     app = require('./app'),
     session = require('../index');
 
-describe('supertest session', function () {
+describe('supertest-session', function () {
 
   var sess = null;
 
-  var Session = session({
-    app: app
-  });
-
   beforeEach(function (done) {
-    sess = new Session();
+    sess = session(app);
     sess.request('get', '/')
       .expect(200)
       .expect('GET,,1')
@@ -57,15 +53,13 @@ describe('Session with a .before hook', function () {
 
   var sess = null;
 
-  var Session = session({
-    app: app,
-    before: function (req) {
-      req.set('authorization', 'bearer TEST_SESSION_TOKEN');
-    }
-  });
-
   beforeEach(function (done) {
-    sess = new Session();
+    sess = session(app, {
+      before: function (req) {
+        req.set('authorization', 'bearer TEST_SESSION_TOKEN');
+      }
+    });
+
     sess.request('get', '/token')
       .expect(200)
       .expect('GET,token,1')

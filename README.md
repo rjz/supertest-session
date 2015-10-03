@@ -21,44 +21,32 @@ References:
 
 Require `supertest-session` and pass in the test application:
 
-    var Session = require('supertest-session')({
-      app: require('../../path/to/app')
-    });
+    var session = require('supertest-session');
+    var myApp = require('../../path/to/app');
 
-You can set environmental variables by including an `envs` object:
+    var testSession = null;
 
-    var Session = require('supertest-session')({
-      app: require('../../path/to/app'),
-      envs: { NODE_ENV: 'development' }
-    });
-
-Set up a session:
-
-    before(function () {
-      this.sess = new Session();
-    });
-
-    after(function () {
-      this.sess.destroy();
+    beforeEach(function () {
+      testSession = session(myApp);
     });
 
 And set some expectations:
 
     it('should fail accessing a restricted page', function (done) {
-      this.sess.get('/restricted')
+      testSession.get('/restricted')
         .expect(401)
         .end(done)
     });
 
     it('should sign in', function (done) {
-      this.sess.post('/signin')
+      testSession.post('/signin')
         .send({ username: 'foo', password: 'password' })
         .expect(200)
         .end(done);
     });
 
     it('should get a restricted page', function (done) {
-      this.sess.get('/restricted')
+      testSession.get('/restricted')
         .expect(200)
         .end(done)
     });
@@ -68,7 +56,7 @@ And set some expectations:
 The cookies attached to the session may be retrieved from `session.cookies` at any time, for instance to inspect the contents of the current session in an external store.
 
     it('should set session details correctly', function (done) {
-      var sessionCookie = _.find(sess.cookies, function (cookie) {
+      var sessionCookie = _.find(testSession.cookies, function (cookie) {
         return _.has(cookie, 'connect.sid');
       });
 
@@ -84,8 +72,7 @@ By default, supertest-session authenticates using session cookies. If your app
 uses a custom strategy to restore sessions, you can provide `before` and `after`
 hooks to adjust the request and inspect the response:
 
-    var Session = require('supertest-session')({
-      app: require('../../path/to/app'),
+    var testSession = session(myApp, {
       before: function (req) {
         req.set('authorization', 'Basic aGVsbG86d29ybGQK');
       }
