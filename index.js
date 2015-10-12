@@ -28,10 +28,20 @@ Object.defineProperty(Session.prototype, 'cookies', {
 });
 
 Session.prototype.reset = function () {
-  this.agent = request.agent(this.app);
 
-  var url = parse(this.agent.get('').url);
-  var isSecure = 'https:' == url.protocol;
+  var url, isSecure;
+
+  // Unset supertest-session options before forwarding options to superagent.
+  var agentOptions = assign({}, this.options, {
+    before: undefined,
+    destroy: undefined,
+    helpers: undefined
+  });
+
+  this.agent = request.agent(this.app, agentOptions);
+
+  url = parse(this.agent.get('').url);
+  isSecure = 'https:' == url.protocol;
   this.cookieAccess = CookieAccess(url.hostname, url.pathname, isSecure);
 };
 
