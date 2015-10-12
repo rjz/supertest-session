@@ -47,6 +47,31 @@ describe('supertest-session', function () {
       });
     });
   });
+
+  describe('(#16) requesting URL of existing app', function () {
+
+    var serverUrl, test;
+
+    beforeEach(function () {
+      // use supertest to set up the app.js server, returning a `Test` instance
+      test = session(app).request('get', '');
+
+      // obtain the running server's URL
+      serverUrl = test.url;
+    });
+
+    afterEach(function (done) {
+      test.end(done);
+    });
+
+    it('behaves correctly', function (done) {
+      sess = session(serverUrl)
+        .get('/')
+        .expect(200)
+        .expect('GET,,1')
+        .end(done);
+    });
+  });
 });
 
 describe('Session with a .before hook', function () {
