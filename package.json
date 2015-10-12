@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "jshint .",
     "pretest": "npm run lint",
-    "test": "jasmine-node test",
+    "test": "jasmine-node test --forceexit",
     "cover": "istanbul cover jasmine-node test"
   },
   "repository": {
@@ -30,7 +30,7 @@
     "url": "https://github.com/rjz/supertest-session/issues"
   },
   "dependencies": {
-    "cookie": "^0.1.3",
+    "cookiejar": "^2.0.1",
     "methods": "^1.1.1",
     "object-assign": "^4.0.1",
     "supertest": "^1.0.1"

@@ -1,28 +1,10 @@
 var assign = require('object-assign'),
-    cookie = require('cookie'),
     methods = require('methods'),
     request = require('supertest'),
-    util = require('util');
-
-// A/V pairs defined for Set-Cookie in RFC-6265
-var reservedAvs = [
-  'path',
-  'expires',
-  'max-age',
-  'domain',
-  'secure',
-  'httponly'
-];
-
-function serializeCookie (c) {
-  return Object.keys(c).reduce(function (pairs, key) {
-    var isReserved = reservedAvs.indexOf(key.toLowerCase()) === -1;
-    if (isReserved) {
-      return pairs.concat(decodeURIComponent(cookie.serialize(key, c[key])));
-    }
-    return pairs;
-  }, []);
-}
+    util = require('util'),
+    CookieJar = require('cookiejar').CookieJar,
+    CookieAccess = require('cookiejar').CookieAccessInfo,
+    parse = require('url').parse;
 
 function Session (app, options) {
 
@@ -32,55 +14,43 @@ function Session (app, options) {
 
   this.app = app;
   this.options = options || {};
+  this.reset();
 
   if (this.options.helpers instanceof Object) {
     assign(this, this.options.helpers);
   }
 }
 
-Session.prototype._before = function (req) {
-  if (this.cookies) {
-    req.cookies = this.cookies.map(serializeCookie).join('; ');
+Object.defineProperty(Session.prototype, 'cookies', {
+  get: function () {
+    return this.agent.jar.getCookies(this.cookieAccess);
   }
+});
 
-  if (this.options.before) {
-    this.options.before.call(this, req);
-  }
-};
+Session.prototype.reset = function () {
+  this.agent = request.agent(this.app);
 
-// Extract cookies once request is complete
-Session.prototype._after = function (req, res) {
-  if (this.options.after) {
-    this.options.after.call(this, req, res);
-  }
-
-  if (res.headers.hasOwnProperty('set-cookie')) {
-    this.cookies = res.headers['set-cookie'].map(cookie.parse);
-  }
+  var url = parse(this.agent.get('').url);
+  var isSecure = 'https:' == url.protocol;
+  this.cookieAccess = CookieAccess(url.hostname, url.pathname, isSecure);
 };
 
 Session.prototype.destroy = function () {
   if (this.options.destroy) {
     this.options.destroy.call(this);
   }
-  this.cookies = null;
+
+  this.reset();
 };
 
 Session.prototype.request = function (meth, route) {
-  var req = request(this.app)[meth](route);
-  var sess = this;
-  var _end = req.end.bind(req);
+  var test = this.agent[meth](route);
 
-  this._before(req);
+  if (this.options.before) {
+    this.options.before.call(this, test);
+  }
 
-  req.end = function (callback) {
-    return _end(function (err, res) {
-      if (err === null) sess._after(req, res);
-      return callback(err, res);
-    });
-  };
-
-  return req;
+  return test;
 };
 
 methods.forEach(function (m) {
@@ -120,4 +90,3 @@ module.exports = function (app, options) {
 
   return new Session(app, options);
 };
-

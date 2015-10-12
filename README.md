@@ -53,14 +53,16 @@ And set some expectations:
 
 ### Accessing session data
 
-The cookies attached to the session may be retrieved from `session.cookies` at any time, for instance to inspect the contents of the current session in an external store.
+The cookies attached to the session may be retrieved from `session.cookies` at
+any time, for instance to inspect the contents of the current session in an
+external store.
 
     it('should set session details correctly', function (done) {
       var sessionCookie = _.find(testSession.cookies, function (cookie) {
-        return _.has(cookie, 'connect.sid');
+        return cookie.name === connect.sid;
       });
 
-      memcached.get(sessionCookie['connect.sid'], function (err, session) {
+      memcached.get(sessionCookie.value, function (err, session) {
         session.user.name.should.eq('Foobar');
         done();
       });
