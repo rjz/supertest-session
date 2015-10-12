@@ -1,6 +1,6 @@
 var assign = require('object-assign'),
     methods = require('methods'),
-    request = require('supertest'),
+    supertest = require('supertest'),
     util = require('util'),
     CookieJar = require('cookiejar').CookieJar,
     CookieAccess = require('cookiejar').CookieAccessInfo,
@@ -38,7 +38,7 @@ Session.prototype.reset = function () {
     helpers: undefined
   });
 
-  this.agent = request.agent(this.app, agentOptions);
+  this.agent = supertest.agent(this.app, agentOptions);
 
   url = parse(this.agent.get('').url);
   isSecure = 'https:' == url.protocol;
