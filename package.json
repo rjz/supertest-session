@@ -7,7 +7,7 @@
     "lint": "jshint .",
     "pretest": "npm run lint",
     "test": "jasmine-node test --forceexit",
-    "cover": "istanbul cover jasmine-node test"
+    "cover": "istanbul cover jasmine-node -- --forceexit test"
   },
   "repository": {
     "type": "git",
