@@ -2,6 +2,10 @@ var assert = require('assert'),
     app = require('./app'),
     session = require('../index');
 
+function isTestCookie (c) {
+  return c.name === 'supertest-session';
+}
+
 describe('supertest-session', function () {
 
   var sess = null;
@@ -19,6 +23,10 @@ describe('supertest-session', function () {
       .expect(200)
       .expect('GET,,2')
       .end(done);
+  });
+
+  it('should expose cookies', function () {
+    expect(sess.cookies.some(isTestCookie)).toBeTruthy();
   });
 
   it('should destroy session', function (done) {
