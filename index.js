@@ -8,6 +8,7 @@ var assign = require('object-assign'),
 
 function Session (app, options) {
 
+  // istanbul ignore if
   if (!app) {
     throw new Error('Session requires an `app`');
   }
