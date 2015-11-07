@@ -74,30 +74,6 @@ methods.forEach(function (m) {
 Session.prototype.del = util.deprecate(Session.prototype.delete,
   'supertest-session: Session.del is deprecated; please use Session.delete');
 
-function legacySession (config) {
-
-  if (!config) config = {};
-
-  // Bind session to `config`
-  function LegacySession () {
-    Session.call(this, config.app, config);
-  }
-
-  util.inherits(LegacySession, Session);
-  assign(LegacySession.prototype, {}, config.helpers);
-
-  return LegacySession;
-}
-
-var deprecatedLegacySession = util.deprecate(legacySession,
-  'supertest-session: module configuration will be removed in next version.');
-
 module.exports = function (app, options) {
-
-  // Check for legacy interface and provide compatibility
-  if (app && app.app) {
-    return deprecatedLegacySession(app);
-  }
-
   return new Session(app, options);
 };
