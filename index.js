@@ -2,7 +2,6 @@ var assign = require('object-assign'),
     methods = require('methods'),
     supertest = require('supertest'),
     util = require('util'),
-    CookieJar = require('cookiejar').CookieJar,
     CookieAccess = require('cookiejar').CookieAccessInfo,
     parse = require('url').parse;
 
