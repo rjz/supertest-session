@@ -47,12 +47,34 @@ it('should sign in', function (done) {
     .expect(200)
     .end(done);
 });
+```
 
-it('should get a restricted page', function (done) {
-  testSession.get('/restricted')
-    .expect(200)
-    .end(done)
+You can set preconditions:
+
+```js
+describe('after authenticating session', function () {
+
+  var authenticatedSession;
+
+  beforeEach(function (done) {
+    testSession.post('/signin')
+      .send({ username: 'foo', password: 'password' })
+      .expect(200)
+      .end(function (err) {
+        if (err) return done(err);
+        authenticatedSession = testSession;
+        return done();
+      });
+  });
+
+  it('should get a restricted page', function (done) {
+    authenticatedSession.get('/restricted')
+      .expect(200)
+      .end(done)
+  });
+
 });
+
 ```
 
 ### Accessing session data
