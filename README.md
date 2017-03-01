@@ -77,24 +77,17 @@ describe('after authenticating session', function () {
 
 ```
 
-### Accessing session data
+### Accessing cookies
 
-The cookies attached to the session may be retrieved from `session.cookies` at
-any time, for instance to inspect the contents of the current session in an
-external store.
+The cookies attached to the session may be retrieved from `session.cookies`:
 
 ```js
-it('should set session details correctly', function (done) {
-  var sessionCookie = _.find(testSession.cookies, function (cookie) {
-    return cookie.name === connect.sid;
-  });
-
-  memcached.get(sessionCookie.value, function (err, session) {
-    session.user.name.should.eq('Foobar');
-    done();
-  });
+var sessionCookie = testSession.cookies.find(function (cookie) {
+  return cookie.name === connect.sid;
 });
 ```
+
+If you're using
 
 ### Request hooks
 
