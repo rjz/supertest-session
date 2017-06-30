@@ -107,3 +107,32 @@ describe('Session with a .before hook', function () {
   });
 });
 
+describe('Session with a cookieConfig', function () {
+  it('should configure default cookieAccess', function (done) {
+    var sess = session(app);
+
+    assert.strictEqual(sess.cookieAccess.domain, '127.0.0.1');
+    assert.strictEqual(sess.cookieAccess.path, '/');
+    assert.strictEqual(sess.cookieAccess.secure, false);
+    assert.strictEqual(sess.cookieAccess.script, false);
+
+    done();
+  });
+
+  it('should allow to specify cookieAccess', function (done) {
+    var cookieAccess = {
+      domain: 'example.com',
+      path: '/testpath',
+      secure: true,
+      script: true,
+    };
+    var sess = session(app, { cookieAccess: cookieAccess });
+
+    assert.strictEqual(sess.cookieAccess.domain, cookieAccess.domain);
+    assert.strictEqual(sess.cookieAccess.path, cookieAccess.path);
+    assert.strictEqual(sess.cookieAccess.secure, cookieAccess.secure);
+    assert.strictEqual(sess.cookieAccess.script, cookieAccess.script);
+
+    done();
+  });
+});

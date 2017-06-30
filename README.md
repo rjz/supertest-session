@@ -103,6 +103,26 @@ var testSession = session(myApp, {
 });
 ```
 
+### Cookie Jar Access Options
+
+By default supertest-session will derive the CookieAccessInfo config of the cookie jar from the
+agent configuration. There might be cases where you want to override this, e.g. if you're testing
+a service which is configured to run behind a proxy but which [sets secure
+cookies](https://expressjs.com/en/api.html#req.secure). To have supertest-session expose these
+secure cookies you can provide an override config to the internal call to
+[CookieAccessInfo](https://github.com/bmeck/node-cookiejar#cookieaccessinfodomainpathsecurescript):
+
+```js
+var cookieAccess = {
+  domain: 'example.com',
+  path: '/testpath',
+  secure: true,
+  script: true,
+};
+var testSession = session(myApp, { cookieAccess: cookieAccess });
+```
+
+
 ## License
 
 MIT

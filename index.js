@@ -29,11 +29,12 @@ Object.defineProperty(Session.prototype, 'cookies', {
 
 Session.prototype.reset = function () {
 
-  var url, isSecure;
+  var url, cookieAccessOptions, domain, path, secure, script;
 
   // Unset supertest-session options before forwarding options to superagent.
   var agentOptions = assign({}, this.options, {
     before: undefined,
+    cookieAccess: undefined,
     destroy: undefined,
     helpers: undefined
   });
@@ -41,8 +42,12 @@ Session.prototype.reset = function () {
   this.agent = supertest.agent(this.app, agentOptions);
 
   url = parse(this.agent.get('').url);
-  isSecure = 'https:' == url.protocol;
-  this.cookieAccess = CookieAccess(url.hostname, url.pathname, isSecure);
+  cookieAccessOptions = this.options.cookieAccess || {};
+  domain = cookieAccessOptions.domain || url.hostname;
+  path = cookieAccessOptions.path || url.path;
+  secure = !!cookieAccessOptions.secure || 'https:' == url.protocol;
+  script = !!cookieAccessOptions.script || false;
+  this.cookieAccess = CookieAccess(domain, path, secure, script);
 };
 
 Session.prototype.destroy = function () {
