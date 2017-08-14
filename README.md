@@ -122,6 +122,24 @@ var cookieAccess = {
 var testSession = session(myApp, { cookieAccess: cookieAccess });
 ```
 
+By default the underlying `supertest` agent will still determine the CookieAccessInfo from the URL.
+If you want supertest-session to instead send cookies according to this `cookieAccess` config you
+can make use of the `before` hook:
+
+```js
+var cookieAccess = {
+  domain: 'example.com',
+  path: '/testpath',
+  secure: true,
+  script: true,
+};
+var testSession = session(myApp, {
+  cookieAccess: cookieAccess,
+  before: function (req) {
+    req.cookies = this.cookies.toValueString();
+  },
+});
+```
 
 ## License
 
