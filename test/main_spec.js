@@ -1,4 +1,5 @@
 var assert = require('assert'),
+    http = require('http'),
     app = require('./app'),
     session = require('../index');
 
@@ -58,22 +59,25 @@ describe('supertest-session', function () {
 
   describe('(#16) requesting URL of existing app', function () {
 
-    var serverUrl, test;
+    var sess,
+        server = http.createServer(app);
 
-    beforeEach(function () {
-      // use supertest to set up the app.js server, returning a `Test` instance
-      test = session(app).request('get', '');
-
-      // obtain the running server's URL
-      serverUrl = test.url;
+    beforeEach(function (done) {
+      server.listen(0, function (err) {
+        if (err) {
+          return done(err);
+        }
+        sess = session('http://127.0.0.1:' + server.address().port);
+        done();
+      });
     });
 
     afterEach(function (done) {
-      test.end(done);
+      server.close(done);
     });
 
     it('behaves correctly', function (done) {
-      sess = session(serverUrl)
+      sess
         .get('/')
         .expect(200)
         .expect('GET,,1')

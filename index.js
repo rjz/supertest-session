@@ -2,6 +2,7 @@ var assign = require('object-assign'),
     methods = require('methods'),
     supertest = require('supertest'),
     util = require('util'),
+    http = require('http'),
     CookieAccess = require('cookiejar').CookieAccessInfo,
     parse = require('url').parse;
 
@@ -12,7 +13,18 @@ function Session (app, options) {
     throw new Error('Session requires an `app`');
   }
 
+  var url = app;
+
+  this.agent = supertest.agent(this.app, this.options);
+
+  if (typeof app === 'function') {
+    app = http.createServer(app);
+    url = supertest.Test.prototype.serverAddress(app, '/');
+  }
+
   this.app = app;
+  this.url = parse(url);
+
   this.options = options || {};
   this.reset();
 
@@ -29,7 +41,7 @@ Object.defineProperty(Session.prototype, 'cookies', {
 
 Session.prototype.reset = function () {
 
-  var url, cookieAccessOptions, domain, path, secure, script;
+  var cookieAccessOptions, domain, path, secure, script;
 
   // Unset supertest-session options before forwarding options to superagent.
   var agentOptions = assign({}, this.options, {
@@ -41,11 +53,10 @@ Session.prototype.reset = function () {
 
   this.agent = supertest.agent(this.app, agentOptions);
 
-  url = parse(this.agent.get('').url);
   cookieAccessOptions = this.options.cookieAccess || {};
-  domain = cookieAccessOptions.domain || url.hostname;
-  path = cookieAccessOptions.path || url.path;
-  secure = !!cookieAccessOptions.secure || 'https:' == url.protocol;
+  domain = cookieAccessOptions.domain || this.url.hostname;
+  path = cookieAccessOptions.path || this.url.path;
+  secure = !!cookieAccessOptions.secure || 'https:' == this.url.protocol;
   script = !!cookieAccessOptions.script || false;
   this.cookieAccess = CookieAccess(domain, path, secure, script);
 };
