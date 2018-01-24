@@ -19,6 +19,9 @@ function Session (app, options) {
 
   if (typeof app === 'function') {
     app = http.createServer(app);
+  }
+
+  if (app instanceof http.Server) {
     url = supertest.Test.prototype.serverAddress(app, '/');
   }
 

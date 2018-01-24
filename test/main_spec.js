@@ -84,6 +84,19 @@ describe('supertest-session', function () {
         .end(done);
     });
   });
+
+  describe('(#30) requesting URL of instantiated app', function () {
+    it('behaves correctly', function (done) {
+      var server = http.createServer(app);
+      var sess = session(server);
+      sess
+        .get('/')
+        .expect(200)
+        .expect('GET,,1')
+        .end(done);
+    });
+  });
+
 });
 
 describe('Session with a .before hook', function () {
