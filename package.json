@@ -1,6 +1,6 @@
 {
   "name": "supertest-session",
-  "version": "3.1.2",
+  "version": "3.1.2-https-support",
   "description": "Cookie-based session persistence for Supertest",
   "main": "index.js",
   "scripts": {

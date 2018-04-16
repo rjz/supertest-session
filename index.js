@@ -3,6 +3,7 @@ var assign = require('object-assign'),
     supertest = require('supertest'),
     util = require('util'),
     http = require('http'),
+    https = require('https'),
     CookieAccess = require('cookiejar').CookieAccessInfo,
     parse = require('url').parse;
 
@@ -21,7 +22,7 @@ function Session (app, options) {
     app = http.createServer(app);
   }
 
-  if (app instanceof http.Server) {
+  if (app instanceof http.Server || app instanceof https.Server) {
     url = supertest.Test.prototype.serverAddress(app, '/');
   }
 
