@@ -13,6 +13,10 @@ References:
   * https://github.com/visionmedia/supertest/issues/46
   * https://github.com/visionmedia/supertest/issues/26
 
+## Installation
+
+    $ npm install --save-dev supertest supertest-session
+
 ## Test
 
     $ npm test
