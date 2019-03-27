@@ -6,8 +6,8 @@
   "scripts": {
     "lint": "jshint .",
     "pretest": "npm run lint",
-    "test": "jasmine-node test --forceexit",
-    "cover": "istanbul cover jasmine-node -- --forceexit test"
+    "test": "nyc jasmine-node test --forceexit",
+    "cover": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -42,11 +42,11 @@
   "devDependencies": {
     "connect": "^3.6.6",
     "cookie-session": "^1.3.3",
-    "coveralls": "^2.11.2",
+    "coveralls": "^3.0.3",
     "express": "^4.16.4",
-    "istanbul": "^0.3.0",
     "jasmine-node": "^1.16.2",
     "jshint": "^2.10.2",
+    "nyc": "^13.3.0",
     "supertest": "^4.0.2"
   }
 }

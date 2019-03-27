@@ -1,21 +1,13 @@
 language: node_js
 
 node_js:
-  - 0.10
-  - 0.12
-  - 4
-  - 6
   - 8
-  - 9
+  - 10
+  - 11
 
 env:
   - NODE_ENV=test
 
 sudo: false
 
-before_script: ./tasks/travis_before_script.sh
-
-script: npm run cover
-
 after_success: ./tasks/travis_after_success.sh
-
