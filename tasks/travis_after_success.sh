@@ -12,5 +12,4 @@ MASTER_BRANCH=master
   exit 0;
 }
 
-cat coverage/lcov.info | coveralls
-
+npm run cover
