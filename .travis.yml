@@ -10,4 +10,4 @@ env:
 
 sudo: false
 
-after_success: ./tasks/travis_after_success.sh
+after_success: npm run cover
