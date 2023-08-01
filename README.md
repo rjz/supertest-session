@@ -2,8 +2,6 @@
 
 Session wrapper around supertest.
 
-[![Build
-Status](https://travis-ci.org/rjz/supertest-session.svg?branch=master)](https://travis-ci.org/rjz/supertest-session)
 [![Coverage
 Status](https://coveralls.io/repos/rjz/supertest-session/badge.png)](https://coveralls.io/r/rjz/supertest-session)
 
