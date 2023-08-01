@@ -24,4 +24,4 @@ jobs:
           cache: "npm"
       - run: npm i
       - run: npm test
-      - run: npm cover
+      - run: npm run cover
